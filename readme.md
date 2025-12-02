@@ -6,6 +6,7 @@
 - composer create-project symfony/skeleton:"7.3.x" .  // installation Symphony
 - composer require --dev symfony/maker-bundle // installation du bundle de creation de controller
 - composer require symfony/twig-bundle // intallation twig
+- composer require symfony/asset // rajouter du CSS
 
 ## instalation des dependances quand on recupere le repo :
 
