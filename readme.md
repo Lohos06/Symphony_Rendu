@@ -1,12 +1,15 @@
 # Symphony
 
 
-## Parametrage du projet :
+## Parametrage du projet au lancement :
 
 - composer create-project symfony/skeleton:"7.3.x" .  // installation Symphony
 - composer require --dev symfony/maker-bundle // installation du bundle de creation de controller
 - composer require symfony/twig-bundle // intallation twig
 
+## instalation des dependances quand on recupere le repo :
+
+- composer install
 
 ## lancer le serveur :
 
