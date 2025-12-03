@@ -14,13 +14,23 @@ use App\Repository\LivreRepository;
 
 final class LivreController extends AbstractController
 {
-    #[Route('/livre', name: 'app_livre')]
 
+    #[Route('/livre', name: 'app_livre')]
+    public function index(LivreRepository $LivreRepository): Response
+    {
+        $livres = $LivreRepository->getLivres();
+        return $this->render('livre/index.html.twig', [
+            'controller_name' => 'LivreController',
+            'livres' => $livres,
+        ]);
+    }
+
+    #[Route('/livre/add', name: 'app_livreAdd')]
     public function createLivre(EntityManagerInterface $em): Response
     {
         $livre = new Livre();
         $livre->setAuteurId(1);
-        $livre->setGenre(2);
+        $livre->setGenreId(2);
         $livre->setTitre('La femme de Ménage');
         $livre->setDescription("Chaque jour, Millie fait le ménage dans la belle maison des Winchester, une riche famille new-yorkaise. Elle récupère aussi leur fille à l'école et prépare les repas avant d'aller se coucher dans sa chambre, au grenier. Pour la jeune femme, ce nouveau travail est une chance inespérée");
       
@@ -28,9 +38,7 @@ final class LivreController extends AbstractController
         $em->persist($livre);
         $em->flush();
 
-        return $this->render('livre/index.html.twig', [
-            'controller_name' => 'LivreController',
-        ]);
+        return $this->redirectToRoute('app_livre');
     }
 }
 

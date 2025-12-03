@@ -14,6 +14,16 @@ use App\Repository\GenreRepository;
 final class GenreController extends AbstractController
 {
     #[Route('/genre', name: 'app_genre')]
+    public function index(GenreRepository $GenreRepository): Response
+    {
+        $genres = $GenreRepository->getGenres();
+        return $this->render('Genre/index.html.twig', [
+            'controller_name' => 'GenreController',
+            'genres' => $genres,
+        ]);
+    }
+
+    #[Route('/genre/add', name: 'app_genreAdd')]
      public function createGenre(EntityManagerInterface $em): Response
     {
         $genre = new Genre();
@@ -22,8 +32,6 @@ final class GenreController extends AbstractController
         $em->persist($genre);
         $em->flush();
 
-        return $this->render('genre/index.html.twig', [
-            'controller_name' => 'GenreController',
-        ]);
+        return $this->redirectToRoute('app_genre');
     }
 }

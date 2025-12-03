@@ -16,6 +16,10 @@ class AuteurRepository extends ServiceEntityRepository
         parent::__construct($registry, Auteur::class);
     }
 
+    public function getAuteurs(){
+        return $this->findAll();
+    }
+
     //    /**
     //     * @return Auteur[] Returns an array of Auteur objects
     //     */

@@ -16,6 +16,10 @@ class LivreRepository extends ServiceEntityRepository
         parent::__construct($registry, Livre::class);
     }
 
+    public function getLivres(){
+        return $this->findAll();
+    }
+
     //    /**
     //     * @return Livre[] Returns an array of Livre objects
     //     */

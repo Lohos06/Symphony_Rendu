@@ -42,14 +42,14 @@ class Livre
         return $this;
     }
 
-    public function getGenre(): ?int
+    public function getGenreId(): ?int
     {
-        return $this->genre;
+        return $this->genreId;
     }
 
-    public function setGenre(int $genre): static
+    public function setGenreId(int $genreId): static
     {
-        $this->genre = $genre;
+        $this->genreId = $genreId;
 
         return $this;
     }

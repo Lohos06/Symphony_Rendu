@@ -23,7 +23,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/SignUp', name: 'app_SignUp')]
+    #[Route('/user/add', name: 'app_userAdd')]
     public function createUser(EntityManagerInterface $em): Response
     {
         $user = new User();
@@ -36,8 +36,6 @@ final class UserController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
+        return $this->redirectToRoute('app_user');
     }
 }

@@ -18,17 +18,14 @@ final class AuteurController extends AbstractController
     #[Route('/auteur', name: 'app_auteur')]
     public function index(AuteurRepository $AuteurRepository): Response
     {
-        $auteurs = $AuteurRepository->getUsers();
+        $auteurs = $AuteurRepository->getAuteurs();
         return $this->render('auteur/index.html.twig', [
             'controller_name' => 'AuteurController',
             'auteurs' => $auteurs,
         ]);
     }
 
-
-
-
-    #[Route('/auteur', name: 'app_auteur')]
+    #[Route('/auteur/add', name: 'app_auteurAdd')]
     public function createAuteur(EntityManagerInterface $em): Response
     {
         $auteur = new Auteur();
@@ -41,8 +38,6 @@ final class AuteurController extends AbstractController
         $em->persist($auteur);
         $em->flush();
 
-        return $this->render('auteur/index.html.twig', [
-            'controller_name' => 'AuteurController',
-        ]);
+        return $this->redirectToRoute('app_auteur');
     }
 }
