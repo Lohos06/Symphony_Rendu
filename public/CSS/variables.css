@@ -1,3 +1,7 @@
-body {
-    background-color: lightblue;
+:root {
+
+    --black : #08001a;
+
+    --grey : #2f2f2f;
+    --lightblue : #479dff;
 }

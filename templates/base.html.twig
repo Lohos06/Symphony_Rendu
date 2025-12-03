@@ -4,7 +4,9 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
 
+        <link rel= "stylesheet" href="{{ asset('CSS/destyle.css')}}">
         <link rel= "stylesheet" href="{{ asset('CSS/variables.css')}}">
+        <link rel= "stylesheet" href="{{ asset('CSS/header.css')}}">
 
         {% block stylesheets %}
         {% endblock %}
@@ -16,6 +18,9 @@
         <header>
             <nav>
                 <a href="/user">User</a>
+                <a href="/user">Livres</a>
+                <a href="/user">auteurs</a>
+                <a href="/user">genres</a>
             </nav>
         </header>
         {% block body %}{% endblock %}

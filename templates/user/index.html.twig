@@ -4,18 +4,6 @@
 
 {% block body %}
 
-    <form action="" method="POST">
-    <fieldset>
-        <label for="name">Enter your name: </label>
-        <input type="text" name="name" id="name" required />
-    </fieldset>
-    <fieldset>
-        <label for="email">Enter your email: </label>
-        <input type="email" name="email" id="email" required />
-    </fieldset>
-        <input type="submit" value="SignUp!" />
-    </form>
-
 {% for user in users %}
     <div>
         <h3>{{user.name}} | id : {{user.id}} | role : {{user.role}}</h3>
