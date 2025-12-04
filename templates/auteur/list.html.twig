@@ -11,11 +11,13 @@
     {% for auteur in auteurs %}
         <li>{{ auteur.nom }} - {{ auteur.siecle }} ({{ auteur.style }})</li>
     {% endfor %}
+
+    {% if app.request.session.get('role') == 'admin' %}
+    <a href="{{ path('app_auteur_add') }}">Ajouter un auteur</a>
+    {% endif %}
 </ul>
 
-{% if app.request.session.get('role') == 'admin' %}
-    <a href="{{ path('app_auteur_add') }}">Ajouter un auteur</a>
-{% endif %}
+
 
 
 {% endblock %}

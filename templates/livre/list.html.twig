@@ -9,8 +9,9 @@
     {% for livre in livres %}
         <li>{{ livre.titre }} - {{ livre.auteur.name }} ({{ livre.genre.name }})</li>
     {% endfor %}
+    <a href="{{ path('app_livre_add') }}">Ajouter un livre</a>
 </ul>
 
-<a href="{{ path('app_livre_add') }}">Ajouter un livre</a>
+
 
 {% endblock %}

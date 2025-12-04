@@ -1,0 +1,67 @@
+.body {
+    min-height: 100vh;
+    background: linear-gradient(145deg, var(--body-bg-start), var(--body-bg-end));
+    color: var(--text-color);
+    font-family: var(--font-family);
+    line-height: var(--line-height);
+    font-size: var(--font-size);
+    padding: var(--padding-body);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-body);
+}
+
+.body h1, .body h2, .body h3 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.body p {
+    color: var(--text-secondary);
+    max-width: var(--max-width-text);
+}
+
+.body a {
+    color: var(--link-color);
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.body a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: var(--link-underline-color);
+    left: 0;
+    bottom: -2px;
+    transition: width 0.3s ease;
+    
+}
+
+.body a:hover::after {
+    width: 100%;
+}
+
+.body a:hover {
+    color: var(--link-hover-color);
+}
+
+.body button {
+    background-color: var(--button-bg);
+    color: var(--button-color);
+    border: none;
+    padding: 12px 25px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.body button:hover {
+    background-color: var(--button-hover-bg);
+    transform: translateY(-2px);
+    box-shadow: var(--button-shadow);
+}

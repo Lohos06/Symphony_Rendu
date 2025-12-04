@@ -18,10 +18,10 @@
             <br>
             <a href="{{ path('app_login', { id: user.id }) }}">Se connecter</a>
         </li>
-        <br>
     {% endfor %}
+    <a href="{{ path('app_sign_up') }}">Créer un compte</a>
 </ul>
 
-<a href="{{ path('app_sign_up') }}">Créer un compte</a>
+
 
 {% endblock %}

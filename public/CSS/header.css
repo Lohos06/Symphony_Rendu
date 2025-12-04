@@ -1,21 +1,32 @@
 header {
-    background-color: var(--lightblue);
-    padding: 2rem;
+    background-color: var(--header-bg);
+    padding: var(--header-padding);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    font-family: var(--font-family);
 }
 
 nav {
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+    gap: var(--link-gap);
 }
 
-a {
+nav a {
+    color: var(--link-color);
     text-decoration: none;
-    color: var(--grey);
-    font-size: 1.5rem;
+    font-weight: 500;
+    padding: var(--link-padding);
+    border-radius: var(--link-radius);
+    transition: all 0.25s ease-in-out;
 }
 
-a:hover {
-    text-decoration: underline;
-    color: var(--black);
+nav a:hover {
+    background-color: var(--link-hover-bg);
+    color: var(--link-hover-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
 }
