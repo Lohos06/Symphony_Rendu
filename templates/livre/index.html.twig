@@ -1,16 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LivreController!{% endblock %}
+{% block title %}Ajouter un livre{% endblock %}
 
 {% block body %}
 
-    {% for livre in livres %}
-        <div>
-            <h3>Titre : {{livre.Titre}} | id : {{livre.id}}</h3>
-            <p>genreId : {{livre.genreId}} | auteurId : {{livre.auteurId}}</p>
-            <p>description : {{livre.description}}</p>
-            <br>
-        </div>
-    {% endfor %}
+<h1>Ajouter un nouveau livre</h1>
+
+<div class="example-wrapper">
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+</div>
 
 {% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Auteurs{% endblock %}
+
+{% block body %}
+<h1>Liste des Auteurs</h1>
+
+<p>ROLE DANS SESSION : {{ app.request.session.get('role') }}</p>
+
+<ul>
+    {% for auteur in auteurs %}
+        <li>{{ auteur.nom }} - {{ auteur.siecle }} ({{ auteur.style }})</li>
+    {% endfor %}
+</ul>
+
+{% if app.request.session.get('role') == 'admin' %}
+    <a href="{{ path('app_auteur_add') }}">Ajouter un auteur</a>
+{% endif %}
+
+
+{% endblock %}

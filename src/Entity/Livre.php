@@ -14,10 +14,10 @@ class Livre
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $auteurId = null;
+    private ?int $auteur = null;
 
     #[ORM\Column]
-    private ?int $genreId = null;
+    private ?int $genre = null;
 
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
@@ -30,26 +30,26 @@ class Livre
         return $this->id;
     }
 
-    public function getAuteurId(): ?int
+    public function getAuteur(): ?int
     {
-        return $this->auteurId;
+        return $this->auteur;
     }
 
-    public function setAuteurId(int $auteurId): static
+    public function setAuteur(int $auteur): static
     {
-        $this->auteurId = $auteurId;
+        $this->auteurId = $auteur;
 
         return $this;
     }
 
-    public function getGenreId(): ?int
+    public function getGenre(): ?int
     {
-        return $this->genreId;
+        return $this->genre;
     }
 
-    public function setGenreId(int $genreId): static
+    public function setGenre(int $genre): static
     {
-        $this->genreId = $genreId;
+        $this->genre = $genre;
 
         return $this;
     }

@@ -2,36 +2,59 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-
-use Doctrine\ORM\EntityManagerInterface;
-
 use App\Entity\Genre;
+use App\Form\GenreType;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\GenreRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 final class GenreController extends AbstractController
 {
     #[Route('/genre', name: 'app_genre')]
-    public function index(GenreRepository $GenreRepository): Response
+    public function index(GenreRepository $repo): Response
     {
-        $genres = $GenreRepository->getGenres();
-        return $this->render('Genre/index.html.twig', [
-            'controller_name' => 'GenreController',
+        $genres = $repo->findAll();
+
+        return $this->render('genre/list.html.twig', [
             'genres' => $genres,
         ]);
     }
 
-    #[Route('/genre/add', name: 'app_genreAdd')]
-     public function createGenre(EntityManagerInterface $em): Response
+    #[Route('/genre/add', name: 'app_genre_add')]
+    public function new(Request $request, EntityManagerInterface $em): Response
     {
+        $session = $request->getSession();
+
+        if ($session->get('role') !== 'admin') {
+            return $this->redirectToRoute('app_user');
+        }
+
+        // crée new genre
         $genre = new Genre();
-        $genre->setNom('Thriller');
 
-        $em->persist($genre);
-        $em->flush();
+        // Créa du form lié au genre
+        $form = $this->createForm(GenreType::class, $genre);
 
-        return $this->redirectToRoute('app_genre');
+        // lit la requete
+        $form->handleRequest($request);
+
+        // si form soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // enregistre en BDD
+            $em->persist($genre);
+            $em->flush();
+
+            // redirige vers la liste des genres
+            return $this->redirectToRoute('app_genre');
+        }
+
+        // Affichage du form
+        return $this->render('genre/index.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

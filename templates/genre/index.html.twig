@@ -1,14 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello GenreController!{% endblock %}
+{% block title %}Ajouter un livre{% endblock %}
 
 {% block body %}
 
-    {% for genre in genres %}
-        <div>
-            <h3>{{genre.nom}} | id : {{genre.id}}</h3>
-            <br>
-        </div>
-    {% endfor %}
-    
+<h1>Ajouter un nouveau livre</h1>
+
+<div class="example-wrapper">
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+</div>
+
 {% endblock %}

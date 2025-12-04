@@ -1,19 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
 
-{% for user in users %}
-    <div>
-        <h3>{{user.name}} | id : {{user.id}} | role : {{user.role}}</h3>
-        <p>email : {{user.email}}</p>
-        <p>password hash : {{user.passwordHash}}</p>
-        <p>description : {{user.description}}</p>
-        <br>
-    </div>
-{% endfor %}
+<h1>Liste des utilisateurs</h1>
 
-<a href="user/SignUp">Add a user</a>
+<ul>
+    {% for user in users %}
+        <li>
+            <strong>{{ user.name }}</strong>  
+            (id : {{ user.id }} – role : {{ user.role }})  
+            <br>
+            email : {{ user.email }}  
+            <br>
+            description : {{ user.description }}
+            <br>
+            <a href="{{ path('app_login', { id: user.id }) }}">Se connecter</a>
+        </li>
+        <br>
+    {% endfor %}
+</ul>
+
+<a href="{{ path('app_sign_up') }}">Créer un compte</a>
 
 {% endblock %}

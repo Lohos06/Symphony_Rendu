@@ -2,45 +2,59 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-
-
-use Doctrine\ORM\EntityManagerInterface;
-
 use App\Entity\Livre;
-use App\Repository\LivreRepository;
+use App\Form\LivreType;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\LivreRepository; 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 final class LivreController extends AbstractController
 {
-
     #[Route('/livre', name: 'app_livre')]
-    public function index(LivreRepository $LivreRepository): Response
+    public function index(LivreRepository $repo): Response
     {
-        $livres = $LivreRepository->getLivres();
-        return $this->render('livre/index.html.twig', [
-            'controller_name' => 'LivreController',
+        $livres = $repo->findAll();
+
+        return $this->render('livre/list.html.twig', [
             'livres' => $livres,
         ]);
     }
 
-    #[Route('/livre/add', name: 'app_livreAdd')]
-    public function createLivre(EntityManagerInterface $em): Response
+    #[Route('/livre/add', name: 'app_livre_add')]
+    public function new(Request $request, EntityManagerInterface $em): Response
     {
+        $session = $request->getSession();
+
+        if ($session->get('role') !== 'admin') {
+            return $this->redirectToRoute('app_user');
+        }
+
+        // crée new livre
         $livre = new Livre();
-        $livre->setAuteurId(1);
-        $livre->setGenreId(2);
-        $livre->setTitre('La femme de Ménage');
-        $livre->setDescription("Chaque jour, Millie fait le ménage dans la belle maison des Winchester, une riche famille new-yorkaise. Elle récupère aussi leur fille à l'école et prépare les repas avant d'aller se coucher dans sa chambre, au grenier. Pour la jeune femme, ce nouveau travail est une chance inespérée");
-      
 
-        $em->persist($livre);
-        $em->flush();
+        // Créa du form lié au livre
+        $form = $this->createForm(LivreType::class, $livre);
 
-        return $this->redirectToRoute('app_livre');
+        // lit la requete
+        $form->handleRequest($request);
+
+        // si form soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // enregistre en BDD
+            $em->persist($livre);
+            $em->flush();
+
+            // redirige vers la liste des livres
+            return $this->redirectToRoute('app_livre');
+        }
+
+        // Affichage du form
+        return $this->render('livre/index.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }
-
-
-
