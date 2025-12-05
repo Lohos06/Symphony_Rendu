@@ -3,7 +3,20 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-<h1>Bienvenue,veuilllez vous conenctez.</h1>
 
+{# On récupère tous les messages d'erreur #}
+{% set errors = app.flashes('error') %}
+
+{# Si il y a un message d'erreur : on l'affiche #}
+{% if errors is not empty %}
+    {% for message in errors %}
+        <div style="color: red; font-weight: bold; margin-bottom: 1rem;">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% else %}
+    {# Sinon : afficher message par défaut #}
+    <h1>Bienvenue ! 😺</h1>
+{% endif %}
 
 {% endblock %}

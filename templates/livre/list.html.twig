@@ -8,10 +8,10 @@
 <ul>
     {% for livre in livres %}
 
-        {# Trouver l'auteur correspondant à l'ID du livre #}
+        {# trouver l'auteur correspondant à l'ID du livre #}
         {% set auteur = auteurs|filter(a => a.id == livre.auteur)|first %}
 
-        {# Trouver le genre correspondant à l'ID du livre #}
+        {# meme chose mais pour genre du livre #}
         {% set genre = genres|filter(g => g.id == livre.genre)|first %}
 
         <li>

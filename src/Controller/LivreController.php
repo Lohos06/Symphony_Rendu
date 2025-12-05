@@ -17,16 +17,22 @@ final class LivreController extends AbstractController
 {
     #[Route('/livre', name: 'app_livre')]
     public function index(
+         Request $request,
         LivreRepository $repo, 
         AuteurRepository $aRepo, 
         GenreRepository $gRepo
     ): Response
     {
-        // Auteur et genre -> IDs → on récupère tout pour faire la correspondance
+        // Auteur et genre -> IDs → on récupère tout pour faire le lien
         $livres  = $repo->findAll();
         $livres  = $repo->findAll();
         $auteurs = $aRepo->findAll();
         $genres  = $gRepo->findAll();
+         //  Vérification connexion
+        $session = $request->getSession();
+        if (!$session->get('userId')) {
+            return $this->redirectToRoute('app_home');
+        }
 
         // envoie les livres / les listes d'auteurs/genres au template
         // pour pouvoir afficher le nom correspondant à chaque ID
@@ -40,12 +46,11 @@ final class LivreController extends AbstractController
     #[Route('/livre/add', name: 'app_livre_add')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
-        $session = $request->getSession();
-
         // Vérification admin
         if ($session->get('role') !== 'admin') {
             return $this->redirectToRoute('app_user');
         }
+        
 
         // Création du livre
         $livre = new Livre();

@@ -13,9 +13,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AuteurController extends AbstractController
 {
-    #[Route('/auteur', name: 'app_auteur')]
-    public function index(AuteurRepository $repo): Response
+#[Route('/auteur', name: 'app_auteur')]
+    public function index(Request $request, AuteurRepository $repo): Response
     {
+        //  Vérification connexion
+        $session = $request->getSession();
+        if (!$session->get('userId')) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        // Récupère tous les auteurs
         $auteurs = $repo->findAll();
 
         return $this->render('auteur/list.html.twig', [
@@ -27,32 +34,30 @@ final class AuteurController extends AbstractController
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $session = $request->getSession();
-        if ($session->get('role') !== 'admin') {
-        
-            return $this->redirectToRoute('app_user');
+
+        // Vérification si connecté
+        if (!$session->get('userId')) {
+            return $this->redirectToRoute('app_home');
         }
 
-        // crée new auteur
-        $auteur = new Auteur();
-
-        // Créa du form lié au auteur
-        $form = $this->createForm(AuteurType::class, $auteur);
-
-        // lit la requete
-        $form->handleRequest($request);
-
-        // si form soumis et valide
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // enregistre en BDD
-            $em->persist($auteur);
-            $em->flush();
-
-            // redirige vers la liste des auteurs
+        // Vérification admin
+        if ($session->get('role') !== 'admin') {
             return $this->redirectToRoute('app_auteur');
         }
 
-        // Affichage du form
+        // Création nouvel auteur
+        $auteur = new Auteur();
+
+        $form = $this->createForm(AuteurType::class, $auteur);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($auteur);
+            $em->flush();
+
+            return $this->redirectToRoute('app_auteur');
+        }
+
         return $this->render('auteur/index.html.twig', [
             'form' => $form->createView(),
         ]);

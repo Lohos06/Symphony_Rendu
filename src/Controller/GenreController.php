@@ -36,6 +36,7 @@ final class GenreController extends AbstractController
     {
         $session = $request->getSession();
 
+
         // NON CONNECTÉ → accès refusé
         if (!$session->get('userId')) {
             return $this->redirectToRoute('app_home');

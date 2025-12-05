@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\SignUpType;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 final class SignUpController extends AbstractController
 {
     #[Route('/sign_up', name: 'app_sign_up')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, UserRepository $repo): Response
     {
         // on crée un new user
         $user = new User();
@@ -27,6 +28,7 @@ final class SignUpController extends AbstractController
 
         // si le form est envoyé et valide
         if ($form->isSubmitted() && $form->isValid()) {
+            
 
             $user->setRole('user');
             // on hache le mp
@@ -38,12 +40,14 @@ final class SignUpController extends AbstractController
             $em->persist($user);
             $em->flush();
             
+            // Vérifier si email déjà utilisé
+            $existingUser = $repo->findOneBy(['email' => $user->getEmail()]);
+            if ($existingUser) {
+                $this->addFlash('error', "Cet email est déjà utilisé.");
+                return $this->redirectToRoute('app_sign_up');
+            }
             
-             //connecte automatiquement l'utilisateur
-            $session = $request->getSession();
-            $session->set('userId', $user->getId());
-            $session->set('role', $user->getRole());
-            return $this->redirectToRoute('app_home');
+            
 
         }
 

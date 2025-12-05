@@ -1,18 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SignUpController!{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
+
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .error-message {
+        color: red;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
 </style>
 
 <div class="example-wrapper">
 
+    {# récupère le message flash de type "error" ( email déjà utilisé dans signupcontroller). 
+   meme s'il n'y  a qu'une erreur, Symfony retourne sous forme de tab,
+   donc j'utilise une boucle for pour l'afficher. #}
+    {% for message in app.flashes('error') %}
+        <div class="error-message">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div>
         {{ form(form) }}
-    <div>
-    
+    </div>
+
 </div>
+
 {% endblock %}
