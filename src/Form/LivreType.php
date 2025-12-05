@@ -21,8 +21,8 @@ class LivreType extends AbstractType
     {
         $builder
             ->add('auteur', EntityType::class,[
-                    'class' => Auteur::class,
-                    'choice_label' => 'nom',
+                    'class' => Auteur::class,// affiche la liste des auteurs venant de la base de données
+                    'choice_label' => 'nom', // ce qui sera affiché dans la liste :  nom auteur
                     'mapped' => false,
             ])
             ->add('genre', EntityType::class, [

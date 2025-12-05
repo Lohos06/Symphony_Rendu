@@ -14,6 +14,7 @@ class GenreType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class)
+            
             ->add('save', SubmitType::class) 
         ;
     }

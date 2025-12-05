@@ -22,10 +22,14 @@ final class LivreController extends AbstractController
         GenreRepository $gRepo
     ): Response
     {
-        $livres = $repo->findAll();
+        // Auteur et genre -> IDs → on récupère tout pour faire la correspondance
+        $livres  = $repo->findAll();
+        $livres  = $repo->findAll();
         $auteurs = $aRepo->findAll();
-        $genres = $gRepo->findAll();
+        $genres  = $gRepo->findAll();
 
+        // envoie les livres / les listes d'auteurs/genres au template
+        // pour pouvoir afficher le nom correspondant à chaque ID
         return $this->render('livre/list.html.twig', [
             'livres'  => $livres,
             'auteurs' => $auteurs,
@@ -45,25 +49,26 @@ final class LivreController extends AbstractController
 
         // Création du livre
         $livre = new Livre();
-
         $form = $this->createForm(LivreType::class, $livre);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Récupérer auteur choisi
+            // Récupération des données envoyées par les champs non mappés
             $auteur = $form->get('auteur')->getData();
-            if ($auteur) {
-                $livre->setAuteur($auteur->getId());
+            $genre  = $form->get('genre')->getData();
+
+            // Vérification pour pas erreur
+            if (!$auteur || !$genre) {
+                $this->addFlash('error', 'Veuillez sélectionner un auteur et un genre.');
+                return $this->redirectToRoute('app_livre_add');
             }
 
-            // Récupérer genre choisi
-            $genre = $form->get('genre')->getData();
-            if ($genre) {
-                $livre->setGenre($genre->getId());
-            }
+            // On applique  IDs dans l'entité (car ce sont des IDs dans la bdd, pas des relations)
+            $livre->setAuteur($auteur->getId());
+            $livre->setGenre($genre->getId());
 
-            // Sauvegarde
+            // Sauvegarde en BDD
             $em->persist($livre);
             $em->flush();
 
