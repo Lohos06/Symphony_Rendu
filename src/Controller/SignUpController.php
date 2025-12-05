@@ -15,45 +15,45 @@ use Symfony\Component\HttpFoundation\Response;
 final class SignUpController extends AbstractController
 {
     #[Route('/sign_up', name: 'app_sign_up')]
-    public function new(Request $request, EntityManagerInterface $em, UserRepository $repo): Response
-    {
-        // on crée un new user
-        $user = new User();
+public function new(Request $request, EntityManagerInterface $em, UserRepository $repo): Response
+{
+    $user = new User();
 
-        // crée form lié à $user
-        $form = $this->createForm(SignUpType::class, $user);
+    $form = $this->createForm(SignUpType::class, $user);
+    $form->handleRequest($request);
 
-        // lit la requête 
-        $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
 
-        // si le form est envoyé et valide
-        if ($form->isSubmitted() && $form->isValid()) {
-            
-
-            $user->setRole('user');
-            // on hache le mp
-            $user->setPasswordHash(
-                password_hash($user->getPasswordHash(), PASSWORD_DEFAULT)
-            );
-
-            // enregistre dans la BDD
-            $em->persist($user);
-            $em->flush();
-            
-            // Vérifier si email déjà utilisé
-            $existingUser = $repo->findOneBy(['email' => $user->getEmail()]);
-            if ($existingUser) {
-                $this->addFlash('error', "Cet email est déjà utilisé.");
-                return $this->redirectToRoute('app_sign_up');
-            }
-            
-            
-
+        // vérifie si email déjà utilisé avant insérer en base
+        $existingUser = $repo->findOneBy(['email' => $user->getEmail()]);
+        if ($existingUser) {
+            $this->addFlash('error', "Cet email est déjà utilisé.");
+            return $this->redirectToRoute('app_sign_up');
         }
 
-        // sinon on affiche le formulaire
-        return $this->render('sign_up/index.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        // set rôle
+        $user->setRole('user');
+
+        // hache mot de passe
+        $user->setPasswordHash(
+            password_hash($user->getPasswordHash(), PASSWORD_DEFAULT)
+        );
+
+        // enregistrement
+        $em->persist($user);
+        $em->flush();
+
+        // connexion
+        $session = $request->getSession();
+        $session->set('userId', $user->getId());
+        $session->set('role', $user->getRole());
+
+        // redirection -> header maj car user connecté 
+        return $this->redirectToRoute('app_home');
     }
+
+    return $this->render('sign_up/index.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
 }

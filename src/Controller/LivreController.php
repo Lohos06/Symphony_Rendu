@@ -17,25 +17,25 @@ final class LivreController extends AbstractController
 {
     #[Route('/livre', name: 'app_livre')]
     public function index(
-         Request $request,
-        LivreRepository $repo, 
-        AuteurRepository $aRepo, 
-        GenreRepository $gRepo
+        Request $request, // permet d'accéder à la session 
+        LivreRepository $repo,  // pour récup les livres
+        AuteurRepository $aRepo,   // pour récup les auteurs
+        GenreRepository $gRepo  // pour récupérer les genres
     ): Response
     {
-        // Auteur et genre -> IDs → on récupère tout pour faire le lien
-        $livres  = $repo->findAll();
-        $livres  = $repo->findAll();
-        $auteurs = $aRepo->findAll();
-        $genres  = $gRepo->findAll();
-         //  Vérification connexion
+        // verif connexion
         $session = $request->getSession();
         if (!$session->get('userId')) {
             return $this->redirectToRoute('app_home');
         }
 
-        // envoie les livres / les listes d'auteurs/genres au template
-        // pour pouvoir afficher le nom correspondant à chaque ID
+        /* récupère toutes les entrées dans la table Livre, Auteur et Genre.
+        envoie tout au template, car les livres contiennent seulement les IDs d'auteur et de genre (pas objets).*/
+       
+        $livres  = $repo->findAll();
+        $auteurs = $aRepo->findAll();
+        $genres  = $gRepo->findAll();
+
         return $this->render('livre/list.html.twig', [
             'livres'  => $livres,
             'auteurs' => $auteurs,
@@ -46,34 +46,34 @@ final class LivreController extends AbstractController
     #[Route('/livre/add', name: 'app_livre_add')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
-        // Vérification admin
+        // session on demarre
+        $session = $request->getSession();
+
+        // vérif admin
         if ($session->get('role') !== 'admin') {
             return $this->redirectToRoute('app_user');
         }
-        
 
-        // Création du livre
+        // création du livre
         $livre = new Livre();
         $form = $this->createForm(LivreType::class, $livre);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Récupération des données envoyées par les champs non mappés
             $auteur = $form->get('auteur')->getData();
             $genre  = $form->get('genre')->getData();
 
-            // Vérification pour pas erreur
             if (!$auteur || !$genre) {
                 $this->addFlash('error', 'Veuillez sélectionner un auteur et un genre.');
                 return $this->redirectToRoute('app_livre_add');
             }
 
-            // On applique  IDs dans l'entité (car ce sont des IDs dans la bdd, pas des relations)
+            // iDs stockés directement dans la table Livre
             $livre->setAuteur($auteur->getId());
             $livre->setGenre($genre->getId());
 
-            // Sauvegarde en BDD
+            // enregistrement
             $em->persist($livre);
             $em->flush();
 

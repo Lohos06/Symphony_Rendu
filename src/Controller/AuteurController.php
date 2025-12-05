@@ -35,17 +35,17 @@ final class AuteurController extends AbstractController
     {
         $session = $request->getSession();
 
-        // Vérification si connecté
+        // vérification si connecté
         if (!$session->get('userId')) {
             return $this->redirectToRoute('app_home');
         }
 
-        // Vérification admin
+        // vérification admin
         if ($session->get('role') !== 'admin') {
             return $this->redirectToRoute('app_auteur');
         }
 
-        // Création nouvel auteur
+        // création nouvel auteur
         $auteur = new Auteur();
 
         $form = $this->createForm(AuteurType::class, $auteur);

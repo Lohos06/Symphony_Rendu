@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+
 final class LoginController extends AbstractController
 {
     #[Route('/login', name: 'app_login')]
@@ -28,11 +29,12 @@ final class LoginController extends AbstractController
             // Récupérer user par email
             $user = $repo->findOneBy(['email' => $email]);
 
+            //si le mp pas = mp dans bdd : hop 
             if (!$user || !password_verify($password, $user->getPasswordHash())) {
                 $error = "Email ou mot de passe incorrect.";
             } else {
 
-                // Créer la session
+               // Créer la session
                 $session = $request->getSession();
                 $session->set('userId', $user->getId());
                 $session->set('role', $user->getRole());

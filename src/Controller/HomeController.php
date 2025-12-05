@@ -15,11 +15,11 @@ final class HomeController extends AbstractController
         // Récupération session
         $session = $request->getSession();
 
-        // Si la personne n'est pas connectée → on affiche la page calassique
+        // si la personne n'est pas connectée : on affiche la page calassique
         if (!$session->get('userId')) {
             return $this->render('home/index.html.twig');
         }
 
-        return $this->render('home/index.html.twig');
+         return $this->render('home/index.html.twig');
     }
 }
