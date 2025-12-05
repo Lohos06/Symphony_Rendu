@@ -7,8 +7,9 @@
 - Maxym
 
 ## Description : 
-- Nous avons créer un site permettant d'ajouter des livres à la bibliothèque. Nous affichons la liste des auteurs et des genres de chaque livre . Lorsque on est en admin on peut modifié les genres et auteurs mais pas quand on est user.
-
+- Nous avons créé un site permettant d’ajouter des livres à la bibliothèque, de se connecter et de s’inscrire,
+- d’afficher la liste des auteurs et des genres de chaque livre, et qui permet à un admin de modifier les genres, les auteurs, les livres et d’accéder à la liste des adhérents,
+- tandis qu’un utilisateur simple peut consulter les livres et les informations mais ne peut rien modifier
 
 ## Parametrage du projet au lancement :
 
