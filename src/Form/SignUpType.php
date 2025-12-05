@@ -19,7 +19,8 @@ class SignUpType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('email', EmailType::class)
-            ->add('passwordHash', PasswordType::class)
+            ->add('passwordHash', PasswordType::class,[
+                    'label' => 'Password'])
             ->add('description', TextareaType::class)
             ->add('save', SubmitType::class)
             
