@@ -4,26 +4,51 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
 
-        <link rel= "stylesheet" href="{{ asset('CSS/destyle.css')}}">
-        <link rel= "stylesheet" href="{{ asset('CSS/variables.css')}}">
-        <link rel= "stylesheet" href="{{ asset('CSS/header.css')}}">
-        <link rel= "stylesheet" href="{{ asset('CSS/body.css')}}">
+        <link rel="stylesheet" href="{{ asset('CSS/destyle.css') }}">
+        <link rel="stylesheet" href="{{ asset('CSS/variables.css') }}">
+        <link rel="stylesheet" href="{{ asset('CSS/header.css') }}">
+        <link rel="stylesheet" href="{{ asset('CSS/body.css') }}">
 
-        {% block stylesheets %}
-        {% endblock %}
-
-        {% block javascripts %}
-        {% endblock %}
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}{% endblock %}
     </head>
+
     <body class="body">
+
         <header>
             <nav>
-                <a href="/user">User</a>
-                <a href="/livre">Livres</a>
-                <a href="/auteur">auteurs</a>
-                <a href="/genre">genres</a>
+
+                {# Si l’utilisateur est connecté #}
+                {% if app.session.get('userId') %}
+                    
+                    <a href="{{ path('app_livre') }}">Livres</a>
+                    <a href="{{ path('app_auteur') }}">Auteurs</a>
+                    <a href="{{ path('app_genre') }}">Genres</a>
+
+                    {# si admin : lien Users #}
+                    {% if app.session.get('role') == 'admin' %}
+                        <a href="{{ path('app_user') }}">Adhérents</a>
+                    {% endif %}
+
+                    <span class="connected">
+                        Connecté ({{ app.session.get('role') }})
+                    </span>
+
+                    <a href="{{ path('app_logout') }}">Se déconnecter</a>
+
+                {% else %}
+
+                    {# Si pas connecté → afficher juste Accueil / Login / Inscription #}
+                    <a href="{{ path('app_home') }}">Accueil</a>
+                    <a href="{{ path('app_login') }}">Se connecter</a>
+                    <a href="{{ path('app_sign_up') }}">S'inscrire</a>
+
+                {% endif %}
+
             </nav>
         </header>
+
         {% block body %}{% endblock %}
+
     </body>
 </html>

@@ -37,7 +37,7 @@ class Livre
 
     public function setAuteur(int $auteur): static
     {
-        $this->auteurId = $auteur;
+        $this->auteur = $auteur;
 
         return $this;
     }

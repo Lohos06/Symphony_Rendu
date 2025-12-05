@@ -14,8 +14,16 @@ use Symfony\Component\HttpFoundation\Response;
 final class GenreController extends AbstractController
 {
     #[Route('/genre', name: 'app_genre')]
-    public function index(GenreRepository $repo): Response
+    public function index(Request $request, GenreRepository $repo): Response
     {
+        $session = $request->getSession();
+
+        
+        if (!$session->get('userId')) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        //  Récup genres
         $genres = $repo->findAll();
 
         return $this->render('genre/list.html.twig', [
@@ -28,31 +36,27 @@ final class GenreController extends AbstractController
     {
         $session = $request->getSession();
 
-        if ($session->get('role') !== 'admin') {
-            return $this->redirectToRoute('app_user');
+        // NON CONNECTÉ → accès refusé
+        if (!$session->get('userId')) {
+            return $this->redirectToRoute('app_home');
         }
 
-        // crée new genre
-        $genre = new Genre();
-
-        // Créa du form lié au genre
-        $form = $this->createForm(GenreType::class, $genre);
-
-        // lit la requete
-        $form->handleRequest($request);
-
-        // si form soumis et valide
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // enregistre en BDD
-            $em->persist($genre);
-            $em->flush();
-
-            // redirige vers la liste des genres
+        //  NON ADMIN → pas le droit
+        if ($session->get('role') !== 'admin') {
             return $this->redirectToRoute('app_genre');
         }
 
-        // Affichage du form
+        //  Création genre
+        $genre = new Genre();
+        $form = $this->createForm(GenreType::class, $genre);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($genre);
+            $em->flush();
+            return $this->redirectToRoute('app_genre');
+        }
+
         return $this->render('genre/index.html.twig', [
             'form' => $form->createView(),
         ]);

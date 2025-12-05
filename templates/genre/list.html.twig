@@ -6,12 +6,17 @@
     <h1>Liste des Genres</h1>
 
     {% if genres is empty %}
-        <p>Aucun genre trouvé</p>
+        <p>Aucun genre trouvé.</p>
     {% else %}
         <ul>
             {% for genre in genres %}
                 <li>{{ genre.nom }}</li>
             {% endfor %}
         </ul>
+    {% endif %}
+
+    {# Bouton visible uniquement pour ADMIN #}
+    {% if app.session.get('role') == 'admin' %}
+        <a href="{{ path('app_genre_add') }}">Ajouter un genre</a>
     {% endif %}
 {% endblock %}

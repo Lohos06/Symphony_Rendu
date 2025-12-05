@@ -7,11 +7,36 @@
 
 <ul>
     {% for livre in livres %}
-        <li>{{ livre.titre }} - {{ livre.auteur.name }} ({{ livre.genre.name }})</li>
+
+        {# Trouver l'auteur correspondant à l'ID du livre #}
+        {% set auteur = auteurs|filter(a => a.id == livre.auteur)|first %}
+
+        {# Trouver le genre correspondant à l'ID du livre #}
+        {% set genre = genres|filter(g => g.id == livre.genre)|first %}
+
+        <li>
+            <strong>{{ livre.titre }}</strong><br>
+
+            Auteur :
+            {% if auteur %}
+                {{ auteur.nom }}
+            {% else %}
+                <em>Auteur introuvable</em>
+            {% endif %}
+
+            <br>Genre :
+            {% if genre %}
+                {{ genre.nom }}
+            {% else %}
+                <em>Genre introuvable</em>
+            {% endif %}
+        </li>
+
     {% endfor %}
-    <a href="{{ path('app_livre_add') }}">Ajouter un livre</a>
 </ul>
 
-
+{% if app.session.get('role') == 'admin' %}
+    <a href="{{ path('app_livre_add') }}">Ajouter un livre</a>
+{% endif %}
 
 {% endblock %}

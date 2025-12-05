@@ -1,27 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des utilisateurs{% endblock %}
+{% block title %}Liste des Adhérents{% endblock %}
 
 {% block body %}
 
-<h1>Liste des utilisateurs</h1>
+<h1>Liste des Adhérents</h1>
 
 <ul>
     {% for user in users %}
         <li>
-            <strong>{{ user.name }}</strong>  
-            (id : {{ user.id }} – role : {{ user.role }})  
-            <br>
-            email : {{ user.email }}  
-            <br>
-            description : {{ user.description }}
-            <br>
-            <a href="{{ path('app_login', { id: user.id }) }}">Se connecter</a>
+            {{ user.name }} — ({{ user.role }}) — {{ user.email }}
         </li>
     {% endfor %}
-    <a href="{{ path('app_sign_up') }}">Créer un compte</a>
 </ul>
-
-
 
 {% endblock %}

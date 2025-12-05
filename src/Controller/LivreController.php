@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Livre;
 use App\Form\LivreType;
+use App\Repository\LivreRepository;
+use App\Repository\AuteurRepository;
+use App\Repository\GenreRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\LivreRepository; 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,12 +16,20 @@ use Symfony\Component\HttpFoundation\Response;
 final class LivreController extends AbstractController
 {
     #[Route('/livre', name: 'app_livre')]
-    public function index(LivreRepository $repo): Response
+    public function index(
+        LivreRepository $repo, 
+        AuteurRepository $aRepo, 
+        GenreRepository $gRepo
+    ): Response
     {
         $livres = $repo->findAll();
+        $auteurs = $aRepo->findAll();
+        $genres = $gRepo->findAll();
 
         return $this->render('livre/list.html.twig', [
-            'livres' => $livres,
+            'livres'  => $livres,
+            'auteurs' => $auteurs,
+            'genres'  => $genres,
         ]);
     }
 
@@ -28,31 +38,38 @@ final class LivreController extends AbstractController
     {
         $session = $request->getSession();
 
+        // Vérification admin
         if ($session->get('role') !== 'admin') {
             return $this->redirectToRoute('app_user');
         }
 
-        // crée new livre
+        // Création du livre
         $livre = new Livre();
 
-        // Créa du form lié au livre
         $form = $this->createForm(LivreType::class, $livre);
-
-        // lit la requete
         $form->handleRequest($request);
 
-        // si form soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // enregistre en BDD
+            // Récupérer auteur choisi
+            $auteur = $form->get('auteur')->getData();
+            if ($auteur) {
+                $livre->setAuteur($auteur->getId());
+            }
+
+            // Récupérer genre choisi
+            $genre = $form->get('genre')->getData();
+            if ($genre) {
+                $livre->setGenre($genre->getId());
+            }
+
+            // Sauvegarde
             $em->persist($livre);
             $em->flush();
 
-            // redirige vers la liste des livres
             return $this->redirectToRoute('app_livre');
         }
 
-        // Affichage du form
         return $this->render('livre/index.html.twig', [
             'form' => $form->createView(),
         ]);

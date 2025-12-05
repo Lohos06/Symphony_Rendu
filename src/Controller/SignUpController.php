@@ -28,6 +28,7 @@ final class SignUpController extends AbstractController
         // si le form est envoyé et valide
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $user->setRole('user');
             // on hache le mp
             $user->setPasswordHash(
                 password_hash($user->getPasswordHash(), PASSWORD_DEFAULT)
@@ -37,7 +38,13 @@ final class SignUpController extends AbstractController
             $em->persist($user);
             $em->flush();
             
-            return $this->redirectToRoute('app_user');
+            
+             //connecte automatiquement l'utilisateur
+            $session = $request->getSession();
+            $session->set('userId', $user->getId());
+            $session->set('role', $user->getRole());
+            return $this->redirectToRoute('app_home');
+
         }
 
         // sinon on affiche le formulaire
