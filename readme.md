@@ -1,5 +1,14 @@
 # Symphony
 
+## Titre : Symfony Rendu:
+- Yasmine
+- Clara
+- Lorenzo
+- Maxym
+
+## Description : 
+- Nous avons créer un site permettant d'ajouter des livres à la bibliothèque. Nous affichons la liste des auteurs et des genres de chaque livre . Lorsque on est en admin on peut modifié les genres et auteurs mais pas quand on est user.
+
 
 ## Parametrage du projet au lancement :
 
@@ -31,3 +40,6 @@
 - php bin/console make:entity // faire une entité
 - php bin/console make:migration // creer une nouvelle version de la base
 - php bin/console doctrine:migrations:migrate // envoyer une migration en base
+
+
+
