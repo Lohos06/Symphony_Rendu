@@ -1,15 +1,15 @@
 # Symphony
 
 ## Titre : Symfony Rendu:
-- Yasmine
-- Clara
-- Lorenzo
-- Maxym
+- Yasmine Meftah
+- Clara Marchal
+- Lorenzo l'Hostis
+- Maxym Melnychuk
 
 ## Description : 
 - Nous avons créé un site permettant d’ajouter des livres à la bibliothèque, de se connecter et de s’inscrire,
 - d’afficher la liste des auteurs et des genres de chaque livre, et qui permet à un admin de modifier les genres, les auteurs, les livres et d’accéder à la liste des adhérents,
-- tandis qu’un utilisateur simple peut consulter les livres et les informations mais ne peut rien modifier
+- tandis qu’un utilisateur simple peut consulter les livres et les informations(auteur et genre) mais ne peut rien modifier
 
 ## Parametrage du projet au lancement :
 
